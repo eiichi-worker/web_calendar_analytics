@@ -63,13 +63,13 @@
             </div>
         </div>
         <div class="row">
-                <div class="col">
-                    <h2>集計　カテゴリ1ごと</h2>
-                    <button type="button" class="btn btn-primary" id="aggregateCategory1Button">予定取得</button>
-                    <hr>
-                    <table id="resultCategory1" class="table table-bordered"></table>
-                </div>
+            <div class="col">
+                <h2>集計　カテゴリ1ごと</h2>
+                <button type="button" class="btn btn-primary" id="aggregateCategory1Button">予定取得</button>
+                <hr>
+                <table id="resultCategory1" class="table table-bordered"></table>
             </div>
+        </div>
     </div>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -100,6 +100,17 @@
     <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
     <!-- My JavaScript -->
     <script src="main.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-99294159-4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-99294159-4');
+    </script>
+
 </body>
 
 </html>
