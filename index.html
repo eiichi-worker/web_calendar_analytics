@@ -1,0 +1,105 @@
+<html lang="ja">
+
+<head>
+    <title>Google Calendar Analytics</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/autofill/2.2.2/css/autoFill.bootstrap4.min.css" />
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1>Google Calendar Analytics
+                    <small>Ver.0.0.1 alpha</small>
+                </h1>
+                <p>Google Calendarの予定を一定のルールに従い集計します。
+                    <br> 現在開発中のものを実験的に公開しています。ご利用は自己責任にてお願い致します。
+                </p>
+                <h2>ようこそ、
+                    <span class="loginName">未ログイン</span>
+                    <small>(
+                        <span class="loginMail">未ログイン</span>)</small>さん</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <button type="button" class="btn btn-primary" id="signInButton">Google認証</button>
+                <button type="button" class="btn btn-secondary" id="signOutButton">サインアウト</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h2>集計対象選択</h2>
+                <h3>Calendar選択</h3>
+                <select class="form-control" id="targetCalendarSelector">
+                    <option>Google認証してください</option>
+                </select>
+
+                <h3>集計期間</h3>
+                開始日:
+                <input type="date" id="targetDateRangeStart">（以上）
+                <br> 終了日:
+                <input type="date" id="targetDateRangeEnd">（未満）
+
+                <h3>取得件数</h3>
+                <input type="number" min="0" max="2500" id="eventGetNum" value="250">
+                <hr>
+                <button type="button" class="btn btn-primary" id="getCalendarEventButton">予定取得</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h2>タスク一覧</h2>
+                <table id="eventList" class="table table-bordered"></table>
+            </div>
+        </div>
+        <div class="row">
+                <div class="col">
+                    <h2>集計　カテゴリ1ごと</h2>
+                    <button type="button" class="btn btn-primary" id="aggregateCategory1Button">予定取得</button>
+                    <hr>
+                    <table id="resultCategory1" class="table table-bordered"></table>
+                </div>
+            </div>
+    </div>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/autofill/2.2.2/js/dataTables.autoFill.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/autofill/2.2.2/js/autoFill.bootstrap4.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/locale/ja.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.14/moment-timezone.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.14/moment-timezone-with-data.min.js"></script>
+
+    <!-- Firebase JavaScript -->
+    <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
+    <!-- My JavaScript -->
+    <script src="main.js"></script>
+</body>
+
+</html>

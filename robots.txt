@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /develop/
+Disallow: /develop2/
+Disallow: /develop3/
+Disallow: /staging/
+Disallow: /staging2/
+Disallow: /staging3/

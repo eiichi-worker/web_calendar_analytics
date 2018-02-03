@@ -1,0 +1,8 @@
+{
+    "apiKey": "AIzaSyDczWpns_eCM4XPujH4PlyeYSVA8ek5oDg",
+    "authDomain": "web-calendar-analytics.firebaseapp.com",
+    "databaseURL": "https://web-calendar-analytics.firebaseio.com",
+    "projectId": "web-calendar-analytics",
+    "storageBucket": "web-calendar-analytics.appspot.com",
+    "messagingSenderId": "483452279848"
+}
