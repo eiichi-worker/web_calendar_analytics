@@ -4,11 +4,12 @@
 
   $.getJSON('firebase.json' , function (data) {
     console.log('firebase.initialize')
-    console.log(data)
+    // console.log(data)
     firebase.initializeApp(data)
   })
 
   $('#signInButton').click(signIn)
+  $('#signOutButton').click(signOut)
   $('#getCalendarEventButton').click(getCalendarEvent)
   $('#aggregateCategory1Button').click(aggregateCategory1)
   var dataTable = $('#eventList').DataTable({
@@ -38,7 +39,7 @@
       { title: '作業時間' }
     ]
   })
-  var resultCategory1List = [];
+  var resultCategory1List = []
 
   // デフォルト値のセット
   var dt = new Date()
@@ -82,6 +83,12 @@
   }
 
   function signOut () {
+    firebase.auth().signOut().then(function() {
+      console.log('signOut 成功')
+    }).catch(function(error) {
+      console.log('signOut エラー')
+      console.log(error)
+    });
   }
 
   function getCalendarList (token) {
@@ -121,6 +128,10 @@
   }
 
   function getCalendarEvent () {
+    // 初期化
+    calendarEventList = []
+    dataTable.clear().draw()
+
     // 取得対象
     var calendarId = $('#targetCalendarSelector').val()
     var startDatetime = $('#targetDateRangeStart').val()
@@ -207,32 +218,39 @@
     return categoryList
   }
 
-  function aggregateCategory1(){
-    // Object.keys()
-    console.log("集計開始");
-    var result = calendarEventList.reduce(function(previous, current){
-      console.log("reduce");
-      console.log(previous);
-      console.log(current);
-      var res = previous[current[3]] += current[6]
-      console.log(res);
-        return res
-    }, [])
+  function aggregateCategory1 () {
+    console.log('集計開始')
+    // 初期化
+    resultCategory1List = []
+    dataTableResultCategory.clear().draw()
 
-    console.log("集計結果");
-    console.log(calendarEventList);
-    console.log(result);
+    var result = {}
+    calendarEventList.forEach(function (event) {
+      console.log(event)
+      var categoryName = event[3]
+      var workTime = event[6]
 
-    result.keys().forEach(key => {
-      var tmpRow = [
-        key,
-        Object.keys(),
-      ]
-
-      tmpRow.row.add(tmpRow).draw()
-      resultCategory1List.push(tmpRow)
+      if (typeof result[categoryName] !== 'number') {
+        result[categoryName] = 0
+      }
+      result[categoryName] += workTime
     })
 
+    console.log('集計結果')
+    console.log(calendarEventList)
+    console.log(result)
+
+    for (key in result) {
+      var tmpRow = [
+        key,
+        result[key]
+      ]
+
+      dataTableResultCategory.row.add(tmpRow).draw()
+      resultCategory1List.push(tmpRow)
+    }
+
+    console.log('集計完了')
     console.log(resultCategory1List)
   }
 }())
