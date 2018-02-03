@@ -24,14 +24,33 @@
                 <p>Google Calendarの予定を一定のルールに従い集計します。
                     <br> 現在開発中のものを実験的に公開しています。ご利用は自己責任にてお願い致します。
                 </p>
-                <h2>ようこそ、
-                    <span class="loginName">未ログイン</span>
-                    <small>(
-                        <span class="loginMail">未ログイン</span>)</small>さん</h2>
             </div>
         </div>
         <div class="row">
             <div class="col">
+                <h2>使い方</h2>
+                <ol>
+                    <li>Google カレンダーに予定を入れてください。
+                        <br>予定名に []で囲って集計したいカテゴリ名を入れてください。（最大3つまで認識します。 位置は関係ありません。左から順に取得します。）  
+                        <br>例） [JOB002][会議] 企画会議
+                        <br>例） [〇〇案件]機能A実装 [開発]
+                    </li>
+                    <li>ここでGoogleにログイン（許可）をしてください。
+                        <br>（予定はどこにも保存しません。集計結果等はエクスポートボタンで自身で保存してください。）</li>
+                    <li>集計したいカレンダーを選択してください。</li>
+                    <li>集計期間を選択してください。</li>
+                    <li>予定取得ボタンを押してください。指定された、カレンダーの集計期間の予定を取得します。</li>
+                    <li>集計開始ボタンを押してください。集計します。</li>
+                </ol>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h2>ようこそ、
+                    <span class="loginName">未ログイン</span>
+                    <small>(
+                        <span class="loginMail">未ログイン</span>)</small>さん</h2>
+
                 <button type="button" class="btn btn-primary" id="signInButton">Google認証</button>
                 <button type="button" class="btn btn-secondary" id="signOutButton">サインアウト</button>
             </div>
@@ -39,7 +58,7 @@
         <div class="row">
             <div class="col">
                 <h2>集計対象選択</h2>
-                <h3>Calendar選択</h3>
+                <h3>カレンダー選択</h3>
                 <select class="form-control" id="targetCalendarSelector">
                     <option>Google認証してください</option>
                 </select>
