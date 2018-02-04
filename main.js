@@ -12,6 +12,8 @@
   $('#signOutButton').click(signOut)
   $('#getCalendarEventButton').click(getCalendarEvent)
   $('#aggregateCategory1Button').click(aggregateCategory1)
+  $('#aggregateDaily1Button').click(aggregateDaily1)
+
   var dataTable = $('#eventList').DataTable({
     dom: 'Bfrtip',
     buttons: [
@@ -40,6 +42,9 @@
     ]
   })
   var resultCategory1List = []
+
+  var dataTableResultDaily
+  var resultDaily1List = []
 
   // デフォルト値のセット
   var dt = new Date()
@@ -83,12 +88,12 @@
   }
 
   function signOut () {
-    firebase.auth().signOut().then(function() {
+    firebase.auth().signOut().then(function () {
       console.log('signOut 成功')
-    }).catch(function(error) {
+    }).catch(function (error) {
       console.log('signOut エラー')
       console.log(error)
-    });
+    })
   }
 
   function getCalendarList (token) {
@@ -230,6 +235,10 @@
       var categoryName = event[3]
       var workTime = event[6]
 
+      console.log(categoryName)
+      console.log(result[categoryName])
+      console.log(typeof result[categoryName])
+
       if (typeof result[categoryName] !== 'number') {
         result[categoryName] = 0
       }
@@ -252,5 +261,88 @@
 
     console.log('集計完了')
     console.log(resultCategory1List)
+  }
+
+  /**
+   * 日別の集計
+   * 列 日
+   * 行 タスク
+   * 
+   */
+  function aggregateDaily1 () {
+    console.log('集計開始')
+    // 初期化
+    resultDaily1List = []
+    //dataTableResultDaily.clear().draw()
+
+    // 列設定
+    var startDatetime = $('#targetDateRangeStart').val()
+    var endDatetime = $('#targetDateRangeEnd').val()
+    var columns = [
+      { title: 'カテゴリ1', data: 'cat1'},
+      { title: 'カテゴリ2', data: 'cat2'},
+      { title: 'カテゴリ3', data: 'cat3'},
+      // { title: '合計時間', data: 'totalWorkingTime'} // todo 実装
+    ]
+
+    var pointDate = moment(startDatetime)
+    var endDate = moment(endDatetime)
+    while (pointDate.isBefore(endDate)) {
+      var date = pointDate.format('YYYY-MM-DD')
+      console.log('列追加: ' + date)
+      columns.push({title: date,data: date})
+      pointDate.add(1, 'days')
+    }
+
+    dataTableResultDaily = $('#resultDaily1').DataTable({
+      dom: 'Bfrtip',
+      buttons: [
+        'copy', 'csv', 'excel', 'pdf', 'print'
+      ],
+      columns: columns
+    })
+    dataTableResultDaily.clear().draw()
+
+    // 集計処理
+    var result = {}
+    calendarEventList.forEach(function (event) {
+      console.log(event)
+      var eventDate = moment(event[0]).format('YYYY-MM-DD')
+      var categoryName1 = event[3]
+      var categoryName2 = event[4]
+      var categoryName3 = event[5]
+      var workTime = event[6]
+
+      var key = categoryName1 + '_' + categoryName2 + '_' + categoryName3 + '_' + eventDate
+      if (typeof result[key] === 'undefined') {
+        result[key] = {
+          'cat1': categoryName1,
+          'cat2': categoryName2,
+          'cat3': categoryName3,
+          'date': eventDate,
+          'workingTime': 0,
+        }
+      }
+      result[key].workingTime += workTime
+    })
+
+    console.log('集計結果')
+    console.log(calendarEventList)
+    console.log(result)
+
+    for (key in result) {
+      var tmpRow = {
+        'cat1': result[key].cat1,
+        'cat2': result[key].cat2,
+        'cat3': result[key].cat3,
+      }
+      tmpRow[result[key].date] = result[key].workingTime
+
+      dataTableResultDaily.row.add(tmpRow).draw()
+      resultDaily1List.push(tmpRow)
+    }
+
+    console.log('集計完了')
+    console.log(resultDaily1List)
   }
 }())
