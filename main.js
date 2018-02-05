@@ -273,7 +273,7 @@
     console.log('集計開始')
     // 初期化
     resultDaily1List = []
-    //dataTableResultDaily.clear().draw()
+    // dataTableResultDaily.clear().draw()
 
     // 列設定
     var startDatetime = $('#targetDateRangeStart').val()
@@ -282,7 +282,7 @@
       { title: 'カテゴリ1', data: 'cat1'},
       { title: 'カテゴリ2', data: 'cat2'},
       { title: 'カテゴリ3', data: 'cat3'},
-      // { title: '合計時間', data: 'totalWorkingTime'} // todo 実装
+      { title: '合計時間', data: 'totalWorkingTime'}
     ]
 
     var pointDate = moment(startDatetime)
@@ -320,7 +320,7 @@
           'cat2': categoryName2,
           'cat3': categoryName3,
           'date': eventDate,
-          'workingTime': 0,
+          'workingTime': 0
         }
       }
       result[key].workingTime += workTime
@@ -330,17 +330,36 @@
     console.log(calendarEventList)
     console.log(result)
 
+    // 集計結果をまとめる
     for (key in result) {
       var tmpRow = {
         'cat1': result[key].cat1,
         'cat2': result[key].cat2,
         'cat3': result[key].cat3,
+        'totalWorkingTime': 0
       }
       tmpRow[result[key].date] = result[key].workingTime
 
-      dataTableResultDaily.row.add(tmpRow).draw()
       resultDaily1List.push(tmpRow)
     }
+
+    // nullを変換してDataテーブルに追加
+    resultDaily1List.forEach(function (tmpRow) {
+      var tmpPointDate = moment(startDatetime)
+      var tmpEndDate = moment(endDatetime)
+      while (tmpPointDate.isBefore(tmpEndDate)) {
+        var date = tmpPointDate.format('YYYY-MM-DD')
+        if (typeof tmpRow[date] === 'undefined') {
+          tmpRow[date] = ''
+        } else {
+          tmpRow.totalWorkingTime += tmpRow[date]
+        }
+
+        tmpPointDate.add(1, 'days')
+      }
+
+      dataTableResultDaily.row.add(tmpRow).draw()
+    })
 
     console.log('集計完了')
     console.log(resultDaily1List)
