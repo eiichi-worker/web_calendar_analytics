@@ -43,7 +43,7 @@
   })
   var resultCategory1List = []
 
-  var dataTableResultDaily
+  var dataTableResultDaily = null
   var resultDaily1List = []
 
   // デフォルト値のセット
@@ -273,7 +273,10 @@
     console.log('集計開始')
     // 初期化
     resultDaily1List = []
-    // dataTableResultDaily.clear().draw()
+    if (dataTableResultDaily !== null) {
+      dataTableResultDaily.destroy()
+      // dataTableResultDaily.clear().draw()
+    }
 
     // 列設定
     var startDatetime = $('#targetDateRangeStart').val()
@@ -301,7 +304,6 @@
       ],
       columns: columns
     })
-    dataTableResultDaily.clear().draw()
 
     // 集計処理
     var result = {}
