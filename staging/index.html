@@ -1,0 +1,161 @@
+<html lang="ja">
+
+<head>
+    <title>Google Calendar Analytics</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/autofill/2.2.2/css/autoFill.bootstrap4.min.css" />
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1>Google Calendar Analytics
+                    <small>Ver.0.0.1 alpha</small>
+                </h1>
+                <p>Google Calendarの予定を一定のルールに従い集計します。
+                    <br>簡易的な工数管理にご利用ください。（作業実績をカレンダーに入力 → ここで集計 → 報告 の簡単3ステップ）
+                    <br>現在、カレンダーのデータ等は一切保存しません。（そのうち保存機能つけるかも）
+                    <br>※ 現在開発中のものを実験的に公開しています。ご利用は自己責任にてお願い致します。
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h2>使い方</h2>
+                <ol>
+                    <li>Google カレンダーに予定を入れてください。
+                        <br>予定名に []で囲って集計したいカテゴリ名を入れてください。（最大3つまで認識します。 位置は関係ありません。左から順に取得します。）  
+                        <br>例） [JOB002][会議] 企画会議
+                        <br>例） [〇〇案件]機能A実装 [開発]
+                    </li>
+                    <li>ここでGoogleにログイン（許可）をしてください。
+                        <br>（予定はどこにも保存しません。集計結果等はエクスポートボタンで自身で保存してください。）</li>
+                    <li>集計したいカレンダーを選択してください。</li>
+                    <li>集計期間を選択してください。</li>
+                    <li>予定取得ボタンを押してください。指定された、カレンダーの集計期間の予定を取得します。</li>
+                    <li>集計開始ボタンを押してください。集計します。</li>
+                </ol>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h2>メモなど</h2>
+                <ul>
+                    <li>ライブラリのエラーが稀によく出ますが、根気強くOKを連打してください。</li>
+                    <li>デザイン等は改善予定です。現状雑なのはご勘弁を。</li>
+                    <li>エラー報告、改善要望など → <a href="https://github.com/eiichi-worker/web_calendar_analytics/issues" target="_blank">issues</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h2>ようこそ、
+                    <span class="loginName">未ログイン</span>
+                    <small>(
+                        <span class="loginMail">未ログイン</span>)</small>さん</h2>
+
+                <button type="button" class="btn btn-primary" id="signInButton">Google認証</button>
+                <button type="button" class="btn btn-secondary" id="signOutButton">サインアウト</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h2>集計対象選択</h2>
+                <h3>カレンダー選択</h3>
+                <select class="form-control" id="targetCalendarSelector">
+                    <option>Google認証してください</option>
+                </select>
+
+                <h3>集計期間</h3>
+                開始日:
+                <input type="date" id="targetDateRangeStart">（以上）
+                <br> 終了日:
+                <input type="date" id="targetDateRangeEnd">（未満）
+
+                <h3>取得件数</h3>
+                <input type="number" min="0" max="2500" id="eventGetNum" value="250">
+                <hr>
+                <button type="button" class="btn btn-primary" id="getCalendarEventButton">予定取得</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h2>タスク一覧</h2>
+                <table id="eventList" class="table table-bordered"></table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h2>集計　カテゴリ1ごと</h2>
+                <button type="button" class="btn btn-primary" id="aggregateCategory1Button">集計開始</button>
+                <hr>
+                <table id="resultCategory1" class="table table-bordered"></table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h2>集計　日別集計</h2>
+                <button type="button" class="btn btn-primary" id="aggregateDaily1Button">集計開始</button>
+                <hr>
+                <table id="resultDaily1" class="table table-bordered"></table>
+            </div>
+        </div>
+    </div>
+
+    <footer>© 2018 Eiichi(<a href="https://github.com/eiichi-worker" target="_blank">eiichi-worker</a>)</footer>
+
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/autofill/2.2.2/js/dataTables.autoFill.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/autofill/2.2.2/js/autoFill.bootstrap4.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/locale/ja.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.14/moment-timezone.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.14/moment-timezone-with-data.min.js"></script>
+
+    <!-- Firebase JavaScript -->
+    <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
+    <!-- My JavaScript -->
+    <script src="/main.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-99294159-4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-99294159-4');
+    </script>
+    
+    <!-- Juicer -->
+    <script src="//staging-kitchen.juicer.cc/?color=2CNqkjKa5JY=" async></script>
+
+</body>
+
+</html>
